@@ -178,3 +178,182 @@
             align-items: center;
             gap: 10px;
         }
+<li>Comisaría más cercana</li>
+                <li>Fiscalía de Familia</li>
+                <li>Llama a la Línea 100</li>
+            </ul>
+            <button class="btn btn-primary" onclick="cerrarModalConfirmacion()">Entendido</button>
+        </div>
+    </div>
+
+    <script>
+        let denuncias = [];
+        let tabActual = 0;
+
+        function cambiarTab(index) {
+            const tabs = document.querySelectorAll('.tab');
+            const contents = document.querySelectorAll('.tab-content');
+            
+            tabs.forEach((tab, i) => {
+                if (i === index) {
+                    tab.classList.add('active');
+                } else {
+                    tab.classList.remove('active');
+                }
+            });
+            
+            contents.forEach((content, i) => {
+                if (i === index) {
+                    content.classList.add('active');
+                } else {
+                    content.classList.remove('active');
+                }
+            });
+            
+            tabActual = index;
+            
+            if (index === 3) {
+                actualizarListaDenuncias();
+            }
+        }
+
+        function mostrarEmergencia() {
+            document.getElementById('modalEmergencia').classList.add('active');
+        }
+
+        function cerrarModal() {
+            document.getElementById('modalEmergencia').classList.remove('active');
+        }
+
+        function cerrarModalConfirmacion() {
+            document.getElementById('modalConfirmacion').classList.remove('active');
+        }
+
+        function validarFormulario() {
+            const campos = {
+                'nombres': 'Nombres',
+                'apellidos': 'Apellidos',
+                'dni': 'DNI',
+                'fechaNac': 'Fecha de Nacimiento',
+                'sexo': 'Sexo',
+                'direccion': 'Dirección',
+                'telefono': 'Teléfono',
+                'nombresAgresor': 'Nombres del Agresor',
+                'apellidosAgresor': 'Apellidos del Agresor',
+                'relacion': 'Relación con el Agresor',
+                'fechaIncidente': 'Fecha del Incidente',
+                'tipoViolencia': 'Tipo de Violencia',
+                'lugarIncidente': 'Lugar del Incidente',
+                'descripcion': 'Descripción de los Hechos'
+            };
+
+            for (let [id, nombre] of Object.entries(campos)) {
+                const valor = document.getElementById(id).value.trim();
+                if (!valor) {
+                    alert(Por favor complete el campo: ${nombre});
+                    return false;
+                }
+            }
+
+            const dni = document.getElementById('dni').value;
+            if (dni.length !== 8 || isNaN(dni)) {
+                alert('El DNI debe tener 8 dígitos numéricos');
+                return false;
+            }
+
+            return true;
+        }
+
+        function guardarDenuncia() {
+            if (!validarFormulario()) {
+                return;
+            }
+
+            const denuncia = {
+                fechaRegistro: new Date(),
+                nombres: document.getElementById('nombres').value,
+                apellidos: document.getElementById('apellidos').value,
+                dni: document.getElementById('dni').value,
+                fechaNac: document.getElementById('fechaNac').value,
+                sexo: document.getElementById('sexo').value,
+                direccion: document.getElementById('direccion').value,
+                telefono: document.getElementById('telefono').value,
+                email: document.getElementById('email').value,
+                nombresAgresor: document.getElementById('nombresAgresor').value,
+                apellidosAgresor: document.getElementById('apellidosAgresor').value,
+                dniAgresor: document.getElementById('dniAgresor').value,
+                relacion: document.getElementById('relacion').value,
+                direccionAgresor: document.getElementById('direccionAgresor').value,
+                fechaIncidente: document.getElementById('fechaIncidente').value,
+                tipoViolencia: document.getElementById('tipoViolencia').value,
+                lugarIncidente: document.getElementById('lugarIncidente').value,
+                descripcion: document.getElementById('descripcion').value,
+                testigos: document.getElementById('testigos').checked,
+                pruebas: document.getElementById('pruebas').checked,
+                atencionMedica: document.getElementById('atencionMedica').checked,
+                denunciaPrevia: document.getElementById('denunciaPrevia').checked
+            };
+
+            denuncias.push(denuncia);
+            document.getElementById('modalConfirmacion').classList.add('active');
+            limpiarFormulario();
+            cambiarTab(3);
+        }
+
+        function limpiarFormulario() {
+            if (confirm('¿Está seguro que desea limpiar el formulario?')) {
+                document.querySelectorAll('input[type="text"], input[type="email"], input[type="tel"], input[type="date"], textarea, select').forEach(el => {
+                    el.value = '';
+                });
+                document.querySelectorAll('input[type="checkbox"]').forEach(el => {
+                    el.checked = false;
+                });
+                cambiarTab(0);
+            }
+        }
+
+        function actualizarListaDenuncias() {
+            const lista = document.getElementById('listaDenuncias');
+            
+            if (denuncias.length === 0) {
+                lista.innerHTML = `
+                    <div class="empty-state">
+                        <svg viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-5 14H7v-2h7v2zm3-4H7v-2h10v2zm0-4H7V7h10v2z"/>
+                        </svg>
+                        <h3>No hay denuncias registradas</h3>
+                        <p>Complete el formulario para registrar una denuncia</p>
+                    </div>
+                `;
+                return;
+            }
+
+            let html = '';
+            denuncias.forEach((d, index) => {
+                const fecha = new Date(d.fechaRegistro);
+                html += `
+                    <div class="denuncia-card">
+                        <h3>Denuncia #${index + 1} - ${fecha.toLocaleDateString('es-PE')} ${fecha.toLocaleTimeString('es-PE')}</h3>
+                        <div class="denuncia-info">
+                            <div><strong>Denunciante:</strong> ${d.nombres} ${d.apellidos}</div>
+                            <div><strong>DNI:</strong> ${d.dni}</div>
+                            <div><strong>Agresor:</strong> ${d.nombresAgresor} ${d.apellidosAgresor}</div>
+                            <div><strong>Relación:</strong> ${d.relacion}</div>
+                            <div><strong>Tipo de Violencia:</strong> ${d.tipoViolencia}</div>
+                            <div><strong>Fecha del Incidente:</strong> ${new Date(d.fechaIncidente).toLocaleDateString('es-PE')}</div>
+                        </div>
+                    </div>
+                `;
+            });
+            lista.innerHTML = html;
+        }
+
+        // Configurar fecha máxima para fechas de nacimiento e incidentes
+        document.addEventListener('DOMContentLoaded', function() {
+            const hoy = new Date().toISOString().split('T')[0];
+            document.getElementById('fechaNac').setAttribute('max', hoy);
+            document.getElementById('fechaIncidente').setAttribute('max', hoy);
+        });
+    </script>
+</body>
+</html>
