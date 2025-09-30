@@ -1,0 +1,179 @@
+checkbox-item input[type="checkbox"] {
+            width: 20px;
+            height: 20px;
+            cursor: pointer;
+        }
+
+        .checkbox-item label {
+            margin: 0;
+            cursor: pointer;
+        }
+
+        .actions {
+            display: flex;
+            gap: 15px;
+            justify-content: flex-end;
+            padding: 25px;
+            background: #f9f9f9;
+            border-top: 1px solid #ddd;
+        }
+
+        .btn {
+            padding: 12px 30px;
+            border: none;
+            border-radius: 8px;
+            font-size: 15px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #28a745 0%, #20803b 100%);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(40, 167, 69, 0.4);
+        }
+
+        .btn-secondary {
+            background: #6c757d;
+            color: white;
+        }
+
+        .btn-secondary:hover {
+            background: #5a6268;
+        }
+
+        .denuncia-card {
+            background: #f8f9fa;
+            border-left: 4px solid #c42a3f;
+            padding: 20px;
+            margin-bottom: 15px;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+
+        .denuncia-card h3 {
+            color: #c42a3f;
+            margin-bottom: 10px;
+        }
+
+        .denuncia-info {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 10px;
+            margin-top: 10px;
+        }
+
+        .denuncia-info div {
+            font-size: 14px;
+        }
+
+        .denuncia-info strong {
+            color: #555;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 60px 20px;
+            color: #999;
+        }
+
+        .empty-state svg {
+            width: 100px;
+            height: 100px;
+            margin-bottom: 20px;
+            opacity: 0.3;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.7);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal.active {
+            display: flex;
+        }
+
+        .modal-content {
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            max-width: 500px;
+            width: 90%;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.5);
+            animation: modalSlide 0.3s;
+        }
+
+        @keyframes modalSlide {
+            from { transform: translateY(-50px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+
+        .modal-content h2 {
+            color: #c42a3f;
+            margin-bottom: 20px;
+        }
+
+        .modal-content p {
+            line-height: 1.8;
+            margin-bottom: 15px;
+        }
+
+        .modal-content .btn {
+            width: 100%;
+            margin-top: 20px;
+        }
+
+        .required {
+            color: #c42a3f;
+        }
+
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 18px;
+            }
+
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+
+            .tabs {
+                font-size: 13px;
+            }
+
+            .tab {
+                padding: 12px 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div>
+                <h1>🛡 SISTEMA DE DENUNCIA DE VIOLENCIA FAMILIAR</h1>
+                <p class="info-linea">📞 Para emergencias, llama al 100 (gratuito desde cualquier teléfono)</p>
+            </div>
+            <button class="btn-emergencia" onclick="mostrarEmergencia()">
+                🚨 LÍNEA 100<br>Emergencia Mujer
+            </button>
+        </div>
+
+        <div class="tabs">
+            <button class="tab active" onclick="cambiarTab(0)">1. Datos del Denunciante</button>
+            <button class="tab" onclick="cambiarTab(1)">2. Datos del Agresor</button>
+            <button class="tab" onclick="cambiarTab(2)">3. Detalles de la Denuncia</button>
+            <button class="tab" onclick="cambiarTab(3)">4. Resumen</button>
+        </div>
